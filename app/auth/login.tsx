@@ -1,5 +1,6 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
@@ -7,6 +8,7 @@ import {
   SPACING,
 } from "@/constants/theme";
 import { useApp } from "@/context/AppContext";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { ApiError } from "@/services/api";
 import { useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
@@ -23,6 +25,8 @@ const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "", "0", "⌫"];
 
 export default function LoginScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { login } = useApp();
   const [phone, setPhone] = useState("");
   const [step, setStep] = useState<"phone" | "pin">("phone");
@@ -90,13 +94,13 @@ export default function LoginScreen() {
 
   if (step === "pin")
     return (
-      <SafeAreaView style={styles.safe}>
+      <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
         <TouchableOpacity style={styles.back} onPress={() => setStep("phone")}>
           <Text style={styles.backText}>← Retour</Text>
         </TouchableOpacity>
         <View style={styles.content}>
-          <Text style={styles.heading}>Entrez votre PIN</Text>
-          <Text style={styles.sub}>+237 {phone}</Text>
+          <Text style={[styles.heading, { color: theme.text }]}>Entrez votre PIN</Text>
+          <Text style={[styles.sub, { color: theme.muted }]}>+237 {phone}</Text>
           <View style={styles.dotsRow}>
             {[0, 1, 2, 3].map((i) => (
               <View
@@ -132,7 +136,7 @@ export default function LoginScreen() {
     );
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <Text style={styles.backText}>← Retour</Text>
       </TouchableOpacity>
@@ -141,16 +145,16 @@ export default function LoginScreen() {
           <View style={styles.miniIcon}>
             <Text style={styles.miniIconText}>L</Text>
           </View>
-          <Text style={styles.brandName}>LISSAFI-P</Text>
+          <Text style={[styles.brandName, { color: theme.text }]}>LISSAFI-P</Text>
         </View>
-        <Text style={styles.heading}>Connexion</Text>
-        <Text style={styles.sub}>Entrez votre numéro de téléphone</Text>
+        <Text style={[styles.heading, { color: theme.text }]}>Connexion</Text>
+        <Text style={[styles.sub, { color: theme.muted }]}>Entrez votre numéro de téléphone</Text>
         <View style={styles.phoneRow}>
-          <View style={styles.prefix}>
-            <Text style={styles.prefixText}>🇨🇲 +237</Text>
+          <View style={[styles.prefix, { borderColor: theme.border, backgroundColor: theme.surface2 }]}>
+            <Text style={[styles.prefixText, { color: theme.text }]}>🇨🇲 +237</Text>
           </View>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { borderColor: theme.border, backgroundColor: theme.surface2, color: theme.text }]}
             placeholder="6XX XXX XXX"
             placeholderTextColor={COLORS.gray400}
             keyboardType="phone-pad"
@@ -180,7 +184,7 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.white },
+  safe: { flex: 1 },
   back: { padding: SPACING.lg },
   backText: {
     color: COLORS.green600,
@@ -211,18 +215,15 @@ const styles = StyleSheet.create({
   brandName: {
     fontWeight: FONT_WEIGHT.bold,
     fontSize: FONT_SIZE.lg,
-    color: COLORS.navy700,
   },
   heading: {
     fontWeight: FONT_WEIGHT.extrabold,
     fontSize: FONT_SIZE.xxl,
-    color: COLORS.navy800,
     textAlign: "center",
     marginBottom: SPACING.sm,
   },
   sub: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.gray400,
     textAlign: "center",
     marginBottom: SPACING.xl,
   },
@@ -232,14 +233,11 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     borderRadius: RADIUS.md,
     borderWidth: 1.5,
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray50,
     justifyContent: "center",
   },
   prefixText: {
     fontSize: FONT_SIZE.sm,
     fontWeight: FONT_WEIGHT.semibold,
-    color: COLORS.gray700,
   },
   input: {
     flex: 1,
@@ -247,10 +245,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     borderRadius: RADIUS.md,
     borderWidth: 1.5,
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray50,
     fontSize: FONT_SIZE.md,
-    color: COLORS.gray900,
   },
   btnPrimary: {
     backgroundColor: COLORS.green600,
