@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useApp } from "@/context/AppContext";
 import { ApiError } from "@/services/api";
 import * as chargesService from "@/services/charges.service";
@@ -36,6 +38,8 @@ const FREQUENCIES = [
 
 export default function NewChargeScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { addCharge } = useApp();
   const [label, setLabel] = useState("");
   const [amount, setAmount] = useState("");
@@ -84,16 +88,16 @@ export default function NewChargeScreen() {
   }
 
   return (
-    <SafeAreaView style={st.safe}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
-        <View style={st.header}>
+        <View style={[st.header, { borderBottomColor: theme.border }]}>
           <TouchableOpacity style={st.back} onPress={() => router.back()}>
-            <IconSymbol name="xmark" size={22} color={COLORS.gray600} />
+            <IconSymbol name="xmark" size={22} color={theme.muted} />
           </TouchableOpacity>
-          <Text style={st.title}>Nouvelle Charge</Text>
+          <Text style={[st.title, { color: theme.text }]}>Nouvelle Charge</Text>
           <View style={{ width: 36 }} />
         </View>
         <ScrollView keyboardShouldPersistTaps="handled">
@@ -125,11 +129,11 @@ export default function NewChargeScreen() {
 
             <View style={st.field}>
               <View style={st.labelRow}>
-                <IconSymbol name="file" size={16} color={COLORS.gray600} />
-                <Text style={st.label}>Nom de la charge *</Text>
+                <IconSymbol name="file" size={16} color={theme.muted} />
+                <Text style={[st.label, { color: theme.text }]}>Nom de la charge *</Text>
               </View>
               <TextInput
-                style={st.input}
+                style={[st.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
                 placeholder="Ex: Loyer boutique"
                 placeholderTextColor={COLORS.gray400}
                 value={label}
@@ -139,12 +143,12 @@ export default function NewChargeScreen() {
 
             <View style={st.field}>
               <View style={st.labelRow}>
-                <IconSymbol name="banknote" size={16} color={COLORS.gray600} />
-                <Text style={st.label}>Montant (FCFA) *</Text>
+                <IconSymbol name="banknote" size={16} color={theme.muted} />
+                <Text style={[st.label, { color: theme.text }]}>Montant (FCFA) *</Text>
               </View>
               <View style={st.inputRow}>
                 <TextInput
-                  style={[st.input, { flex: 1 }]}
+                  style={[st.input, { flex: 1, backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
                   placeholder="100 000"
                   placeholderTextColor={COLORS.gray400}
                   keyboardType="numeric"
@@ -187,11 +191,11 @@ export default function NewChargeScreen() {
 
             <View style={st.field}>
               <View style={st.labelRow}>
-                <IconSymbol name="calendar" size={16} color={COLORS.gray600} />
-                <Text style={st.label}>Prochaine échéance</Text>
+                <IconSymbol name="calendar" size={16} color={theme.muted} />
+                <Text style={[st.label, { color: theme.text }]}>Prochaine échéance</Text>
               </View>
               <TextInput
-                style={st.input}
+                style={[st.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
                 placeholder="AAAA-MM-JJ"
                 placeholderTextColor={COLORS.gray400}
                 value={nextDue}
@@ -207,7 +211,7 @@ export default function NewChargeScreen() {
             </View>
           </View>
         </ScrollView>
-        <View style={st.footer}>
+        <View style={[st.footer, { borderTopColor: theme.border, backgroundColor: theme.surface }]}>
           <TouchableOpacity
             style={st.cancelBtn}
             onPress={() => router.back()}
@@ -236,7 +240,7 @@ export default function NewChargeScreen() {
 }
 
 const st = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.white },
+  safe: { flex: 1 },
   header: {
     flexDirection: "row",
     alignItems: "center",
