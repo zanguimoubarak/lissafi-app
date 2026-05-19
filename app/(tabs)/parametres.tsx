@@ -16,12 +16,14 @@ import * as WebBrowser from "expo-web-browser";
 import { useApp } from "@/context/AppContext";
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   SPACING,
   RADIUS,
   SHADOW,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import {
   APP_VERSION,
   PRIVACY_POLICY_URL,
@@ -82,6 +84,8 @@ function SettingRow({
 
 export default function ParametresScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { user, setUser, logout } = useApp();
   const [notifs, setNotifs] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
@@ -156,9 +160,9 @@ export default function ParametresScreen() {
   const hoursLabel = formatWorkHours(user?.workHoursStart, user?.workHoursEnd);
 
   return (
-    <SafeAreaView style={st.safe}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={st.profileCard}>
+        <View style={[st.profileCard, { backgroundColor: COLORS.primaryDark }]}>
           <View style={st.avatar}>
             <Text style={st.avatarTxt}>{user?.boutiqueName?.[0] ?? "B"}</Text>
           </View>
@@ -217,8 +221,8 @@ export default function ParametresScreen() {
         )}
 
         <View style={st.section}>
-          <Text style={st.sectionTitle}>MON PROFIL</Text>
-          <View style={st.card}>
+          <Text style={[st.sectionTitle, { color: theme.muted }]}>MON PROFIL</Text>
+          <View style={[st.card, { backgroundColor: theme.surface }]}>
             <SettingRow
               icon="store"
               label="Nom de la boutique"
@@ -255,8 +259,8 @@ export default function ParametresScreen() {
         </View>
 
         <View style={st.section}>
-          <Text style={st.sectionTitle}>APPLICATION</Text>
-          <View style={st.card}>
+          <Text style={[st.sectionTitle, { color: theme.muted }]}>APPLICATION</Text>
+          <View style={[st.card, { backgroundColor: theme.surface }]}>
             <SettingRow
               icon="bell"
               label="Notifications Push"
@@ -293,8 +297,8 @@ export default function ParametresScreen() {
         </View>
 
         <View style={st.section}>
-          <Text style={st.sectionTitle}>GESTION</Text>
-          <View style={st.card}>
+          <Text style={[st.sectionTitle, { color: theme.muted }]}>GESTION</Text>
+          <View style={[st.card, { backgroundColor: theme.surface }]}>
             <SettingRow
               icon="package"
               label="Mon Stock"
@@ -332,8 +336,8 @@ export default function ParametresScreen() {
         </View>
 
         <View style={st.section}>
-          <Text style={st.sectionTitle}>AIDE & SUPPORT</Text>
-          <View style={st.card}>
+          <Text style={[st.sectionTitle, { color: theme.muted }]}>AIDE & SUPPORT</Text>
+          <View style={[st.card, { backgroundColor: theme.surface }]}>
             <SettingRow
               icon="message"
               label="Support WhatsApp"

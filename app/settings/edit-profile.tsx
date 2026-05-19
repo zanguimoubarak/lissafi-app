@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useApp } from "@/context/AppContext";
 import { ApiError } from "@/services/api";
 import * as authService from "@/services/auth.service";
@@ -28,6 +30,8 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 
 export default function EditProfileScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { user, setUser } = useApp();
   const [boutiqueName, setBoutiqueName] = useState(user?.boutiqueName ?? "");
   const [address, setAddress] = useState(user?.address ?? "");
@@ -65,16 +69,16 @@ export default function EditProfileScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.flex}
       >
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: theme.border }]}>
           <TouchableOpacity style={styles.close} onPress={() => router.back()}>
-            <IconSymbol name="xmark" size={22} color={COLORS.gray600} />
+            <IconSymbol name="xmark" size={22} color={theme.muted} />
           </TouchableOpacity>
-          <Text style={styles.title}>Modifier le profil</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Modifier le profil</Text>
           <View style={styles.close} />
         </View>
 
@@ -83,27 +87,27 @@ export default function EditProfileScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.label}>Nom de la boutique</Text>
+          <Text style={[styles.label, { color: theme.text }]}>Nom de la boutique</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
             value={boutiqueName}
             onChangeText={setBoutiqueName}
             placeholder="Ma boutique"
             placeholderTextColor={COLORS.gray400}
           />
 
-          <Text style={styles.label}>Adresse</Text>
+          <Text style={[styles.label, { color: theme.text }]}>Adresse</Text>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
             value={address}
             onChangeText={setAddress}
             placeholder="Quartier, ville..."
             placeholderTextColor={COLORS.gray400}
           />
 
-          <Text style={styles.label}>Description</Text>
+          <Text style={[styles.label, { color: theme.text }]}>Description</Text>
           <TextInput
-            style={[styles.input, styles.textArea]}
+            style={[styles.input, styles.textArea, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
             value={description}
             onChangeText={setDescription}
             placeholder="Présentez votre activité..."
@@ -115,7 +119,7 @@ export default function EditProfileScreen() {
           {error ? <Text style={styles.error}>{error}</Text> : null}
         </ScrollView>
 
-        <View style={styles.footer}>
+        <View style={[styles.footer, { borderTopColor: theme.border }]}>
           <TouchableOpacity
             style={[styles.submit, isSubmitting ? styles.disabled : null]}
             disabled={isSubmitting}
@@ -136,7 +140,7 @@ export default function EditProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { backgroundColor: COLORS.white, flex: 1 },
+  safe: { flex: 1 },
   flex: { flex: 1 },
   header: {
     alignItems: "center",

@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { ApiError } from "@/services/api";
 import * as authService from "@/services/auth.service";
 import { useRouter } from "expo-router";
@@ -26,16 +28,18 @@ function PinField({
   label,
   value,
   onChangeText,
+  theme,
 }: {
   label: string;
   value: string;
   onChangeText: (value: string) => void;
+  theme: { text: string; border: string; surface2: string };
 }) {
   return (
     <View style={styles.field}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, { color: theme.text }]}>{label}</Text>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
         value={value}
         onChangeText={(text) => onChangeText(text.replace(/\D/g, "").slice(0, 4))}
         placeholder="••••"
@@ -50,6 +54,8 @@ function PinField({
 
 export default function ChangePinScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const [currentPin, setCurrentPin] = useState("");
   const [newPin, setNewPin] = useState("");
   const [confirmPin, setConfirmPin] = useState("");
@@ -89,30 +95,31 @@ export default function ChangePinScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
+      <View style={[styles.header, { borderBottomColor: theme.border }]}>
         <TouchableOpacity style={styles.close} onPress={() => router.back()}>
-          <IconSymbol name="xmark" size={22} color={COLORS.gray600} />
+          <IconSymbol name="xmark" size={22} color={theme.muted} />
         </TouchableOpacity>
-        <Text style={styles.title}>Modifier le PIN</Text>
+        <Text style={[styles.title, { color: theme.text }]}>Modifier le PIN</Text>
         <View style={styles.close} />
       </View>
 
       <View style={styles.body}>
-        <Text style={styles.hint}>
+        <Text style={[styles.hint, { color: theme.muted }]}>
           Votre PIN protège l&apos;accès à vos données financières.
         </Text>
-        <PinField label="PIN actuel" value={currentPin} onChangeText={setCurrentPin} />
-        <PinField label="Nouveau PIN" value={newPin} onChangeText={setNewPin} />
+        <PinField label="PIN actuel" value={currentPin} onChangeText={setCurrentPin} theme={theme} />
+        <PinField label="Nouveau PIN" value={newPin} onChangeText={setNewPin} theme={theme} />
         <PinField
           label="Confirmer le PIN"
           value={confirmPin}
           onChangeText={setConfirmPin}
+          theme={theme}
         />
         {error ? <Text style={styles.error}>{error}</Text> : null}
       </View>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { borderTopColor: theme.border }]}>
         <TouchableOpacity
           style={[styles.submit, isSubmitting ? styles.disabled : null]}
           disabled={isSubmitting}
@@ -132,7 +139,7 @@ export default function ChangePinScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { backgroundColor: COLORS.white, flex: 1 },
+  safe: { flex: 1 },
   header: {
     alignItems: "center",
     borderBottomColor: COLORS.gray100,
