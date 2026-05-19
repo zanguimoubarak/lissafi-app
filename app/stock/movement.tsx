@@ -1,7 +1,8 @@
 import { ApiError } from "@/services/api";
 import * as stockService from "@/services/stock.service";
-import { COLORS, FONT_SIZE, FONT_WEIGHT, RADIUS, SHADOW, SPACING } from "@/constants/theme";
+import { COLORS, Colors, FONT_SIZE, FONT_WEIGHT, RADIUS, SHADOW, SPACING } from "@/constants/theme";
 import { useApp } from "@/context/AppContext";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import type { MovementType } from "@/services/stock.service";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -26,6 +27,8 @@ const MOVEMENTS: { type: MovementType; label: string; icon: string }[] = [
 
 export default function StockMovementScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const {
     productId = "",
     productName = "",
@@ -75,21 +78,21 @@ export default function StockMovementScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.root}
       >
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: theme.border }]}>
           <TouchableOpacity style={styles.close} onPress={() => router.back()}>
-            <IconSymbol name="xmark" size={22} color={COLORS.gray600} />
+            <IconSymbol name="xmark" size={22} color={theme.muted} />
           </TouchableOpacity>
-          <Text style={styles.title}>Mouvement de stock</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Mouvement de stock</Text>
           <View style={styles.close} />
         </View>
 
         <View style={styles.body}>
-          <Text style={styles.productName}>{productName}</Text>
+          <Text style={[styles.productName, { color: theme.text }]}>{productName}</Text>
 
           <View style={styles.typeRow}>
             {MOVEMENTS.map((movement) => (
@@ -119,16 +122,16 @@ export default function StockMovementScreen() {
             ))}
           </View>
 
-          <Text style={styles.label}>Quantité</Text>
+          <Text style={[styles.label, { color: theme.text }]}>Quantité</Text>
           <View style={styles.qtyRow}>
             <TouchableOpacity
               style={styles.qtyButton}
               onPress={() => setQuantity((value) => Math.max(1, value - 1))}
             >
-              <IconSymbol name="minus" size={22} color={COLORS.gray700} />
+              <IconSymbol name="minus" size={22} color={theme.text} />
             </TouchableOpacity>
             <TextInput
-              style={styles.qtyInput}
+              style={[styles.qtyInput, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
               keyboardType="numeric"
               textAlign="center"
               value={String(quantity)}
@@ -138,13 +141,13 @@ export default function StockMovementScreen() {
               style={styles.qtyButton}
               onPress={() => setQuantity((value) => value + 1)}
             >
-              <IconSymbol name="plus" size={22} color={COLORS.gray700} />
+              <IconSymbol name="plus" size={22} color={theme.text} />
             </TouchableOpacity>
           </View>
 
-          <Text style={styles.label}>Raison</Text>
+          <Text style={[styles.label, { color: theme.text }]}>Raison</Text>
           <TextInput
-            style={[styles.input, styles.reasonInput]}
+            style={[styles.input, styles.reasonInput, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
             placeholder="Livraison fournisseur, inventaire..."
             placeholderTextColor={COLORS.gray400}
             value={reason}
@@ -155,7 +158,7 @@ export default function StockMovementScreen() {
           {error ? <Text style={styles.errorText}>{error}</Text> : null}
         </View>
 
-        <View style={styles.footer}>
+        <View style={[styles.footer, { borderTopColor: theme.border }]}>
           <TouchableOpacity
             activeOpacity={0.85}
             disabled={isSubmitting}
@@ -177,7 +180,7 @@ export default function StockMovementScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.white },
+  safe: { flex: 1 },
   root: { flex: 1 },
   header: {
     alignItems: "center",
