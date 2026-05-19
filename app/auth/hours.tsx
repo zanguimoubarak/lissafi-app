@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -21,6 +23,8 @@ type TimeBlock = { debut: string; fin: string };
 
 export default function HoursScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const [matin, setMatin] = useState<TimeBlock>({
     debut: "07:00",
     fin: "12:00",
@@ -106,7 +110,7 @@ export default function HoursScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <Text style={styles.backText}>← Retour</Text>
       </TouchableOpacity>
@@ -115,10 +119,10 @@ export default function HoursScreen() {
           <View style={styles.miniIcon}>
             <Text style={styles.miniIconText}>L</Text>
           </View>
-          <Text style={styles.brandName}>LISSAFI-P</Text>
+          <Text style={[styles.brandName, { color: theme.text }]}>LISSAFI-P</Text>
         </View>
-        <Text style={styles.heading}>Vos heures de gestion</Text>
-        <Text style={styles.sub}>
+        <Text style={[styles.heading, { color: theme.text }]}>Vos heures de gestion</Text>
+        <Text style={[styles.sub, { color: theme.muted }]}>
           D&eacute;finissez vos plages d&apos;ouverture
         </Text>
 
@@ -148,7 +152,7 @@ export default function HoursScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.white },
+  safe: { flex: 1 },
   back: { padding: SPACING.lg },
   backText: {
     color: COLORS.green600,
@@ -179,17 +183,14 @@ const styles = StyleSheet.create({
   brandName: {
     fontWeight: FONT_WEIGHT.bold,
     fontSize: FONT_SIZE.lg,
-    color: COLORS.navy700,
   },
   heading: {
     fontWeight: FONT_WEIGHT.extrabold,
     fontSize: FONT_SIZE.xxl,
-    color: COLORS.navy800,
     marginBottom: SPACING.xs,
   },
   sub: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.gray500,
     marginBottom: SPACING.xl,
   },
   block: {
