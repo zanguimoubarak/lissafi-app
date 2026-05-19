@@ -16,12 +16,14 @@ import { useRouter, useLocalSearchParams } from "expo-router";
 import { useApp, OperationType } from "@/context/AppContext";
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   SPACING,
   RADIUS,
   SHADOW,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { ApiError } from "@/services/api";
 import * as operationsService from "@/services/operations.service";
 import { IconSymbol } from "@/components/ui/icon-symbol";
@@ -62,6 +64,8 @@ const TYPE_CONFIG: Record<
 
 export default function EditOperationScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { id } = useLocalSearchParams<{ id?: string }>();
   const { replaceOperation } = useApp();
 
@@ -165,7 +169,7 @@ export default function EditOperationScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={st.safe}>
+      <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
         <View style={st.loadingBox}>
           <ActivityIndicator color={COLORS.green600} size="small" />
         </View>
@@ -174,16 +178,16 @@ export default function EditOperationScreen() {
   }
 
   return (
-    <SafeAreaView style={st.safe}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
-        <View style={st.header}>
+        <View style={[st.header, { borderBottomColor: theme.border }]}>
           <TouchableOpacity style={st.backBtn} onPress={() => router.back()}>
-            <IconSymbol name="xmark" size={22} color={COLORS.gray600} />
+            <IconSymbol name="xmark" size={22} color={theme.muted} />
           </TouchableOpacity>
-          <Text style={st.title}>Modifier l&apos;opération</Text>
+          <Text style={[st.title, { color: theme.text }]}>Modifier l&apos;opération</Text>
           <View style={{ width: 36 }} />
         </View>
 
@@ -219,11 +223,11 @@ export default function EditOperationScreen() {
           <View style={st.body}>
             <View style={st.field}>
               <View style={st.labelRow}>
-                <IconSymbol name="package" size={16} color={COLORS.gray600} />
-                <Text style={st.label}>Article</Text>
+                <IconSymbol name="package" size={16} color={theme.muted} />
+                <Text style={[st.label, { color: theme.text }]}>Article</Text>
               </View>
               <TextInput
-                style={st.input}
+                style={[st.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
                 placeholder="Ex: Sac de Riz 50kg"
                 placeholderTextColor={COLORS.gray400}
                 value={itemName}
@@ -233,12 +237,12 @@ export default function EditOperationScreen() {
 
             <View style={st.field}>
               <View style={st.labelRow}>
-                <IconSymbol name="banknote" size={16} color={COLORS.gray600} />
-                <Text style={st.label}>Prix unitaire</Text>
+                <IconSymbol name="banknote" size={16} color={theme.muted} />
+                <Text style={[st.label, { color: theme.text }]}>Prix unitaire</Text>
               </View>
               <View style={st.inputWithSuffix}>
                 <TextInput
-                  style={[st.input, { flex: 1, marginBottom: 0 }]}
+                  style={[st.input, { flex: 1, marginBottom: 0, backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
                   placeholder="15 000"
                   placeholderTextColor={COLORS.gray400}
                   keyboardType="numeric"
@@ -253,18 +257,18 @@ export default function EditOperationScreen() {
 
             <View style={st.field}>
               <View style={st.labelRow}>
-                <IconSymbol name="chart.bar" size={16} color={COLORS.gray600} />
-                <Text style={st.label}>Quantité</Text>
+                <IconSymbol name="chart.bar" size={16} color={theme.muted} />
+                <Text style={[st.label, { color: theme.text }]}>Quantité</Text>
               </View>
               <View style={st.qtyRow}>
                 <TouchableOpacity
                   style={st.qtyBtn}
                   onPress={() => setQty((q) => Math.max(1, q - 1))}
                 >
-                  <IconSymbol name="minus" size={22} color={COLORS.gray700} />
+                  <IconSymbol name="minus" size={22} color={theme.text} />
                 </TouchableOpacity>
                 <TextInput
-                  style={st.qtyInput}
+                  style={[st.qtyInput, { borderColor: theme.border, backgroundColor: theme.surface2, color: theme.text }]}
                   value={String(qty)}
                   onChangeText={(v) => setQty(Math.max(1, parseInt(v, 10) || 1))}
                   keyboardType="numeric"
@@ -274,7 +278,7 @@ export default function EditOperationScreen() {
                   style={st.qtyBtn}
                   onPress={() => setQty((q) => q + 1)}
                 >
-                  <IconSymbol name="plus" size={22} color={COLORS.gray700} />
+                  <IconSymbol name="plus" size={22} color={theme.text} />
                 </TouchableOpacity>
               </View>
             </View>
@@ -328,11 +332,11 @@ export default function EditOperationScreen() {
 
             <View style={st.field}>
               <View style={st.labelRow}>
-                <IconSymbol name="message" size={16} color={COLORS.gray600} />
-                <Text style={st.label}>Commentaire (optionnel)</Text>
+                <IconSymbol name="message" size={16} color={theme.muted} />
+                <Text style={[st.label, { color: theme.text }]}>Commentaire (optionnel)</Text>
               </View>
               <TextInput
-                style={[st.input, { height: 72, textAlignVertical: "top" }]}
+                style={[st.input, { height: 72, textAlignVertical: "top", backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
                 placeholder="Note additionnelle..."
                 placeholderTextColor={COLORS.gray400}
                 value={comment}
@@ -344,7 +348,7 @@ export default function EditOperationScreen() {
           </View>
         </ScrollView>
 
-        <View style={st.footer}>
+        <View style={[st.footer, { borderTopColor: theme.border, backgroundColor: theme.surface }]}>
           <TouchableOpacity
             style={[st.validateBtn, { backgroundColor: cfg.color }, isSubmitting ? st.disabled : null]}
             onPress={handleSave}
@@ -364,7 +368,7 @@ export default function EditOperationScreen() {
 }
 
 const st = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.white },
+  safe: { flex: 1 },
   loadingBox: { alignItems: "center", flex: 1, justifyContent: "center" },
   header: {
     flexDirection: "row",
