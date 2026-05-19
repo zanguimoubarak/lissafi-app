@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useRouter } from "expo-router";
 import React, { useCallback, useState } from "react";
 import {
@@ -25,6 +27,8 @@ import * as authService from "@/services/auth.service";
 
 export default function RegisterScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +61,7 @@ export default function RegisterScreen() {
   }, [phone, router]);
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
@@ -71,21 +75,25 @@ export default function RegisterScreen() {
             <View style={styles.miniIcon}>
               <Text style={styles.miniIconText}>L</Text>
             </View>
-            <Text style={styles.brandName}>LISSAFI-P</Text>
+            <Text style={[styles.brandName, { color: theme.text }]}>LISSAFI-P</Text>
           </View>
 
-          <Text style={styles.heading}>
+          <Text style={[styles.heading, { color: theme.text }]}>
             Votre boutique{"\n"}dans votre poche
           </Text>
-          <Text style={styles.sub}>Entrez votre numéro de téléphone</Text>
+          <Text style={[styles.sub, { color: theme.muted }]}>Entrez votre numéro de téléphone</Text>
 
           {/* Phone Input */}
           <View style={styles.phoneRow}>
-            <View style={styles.prefix}>
-              <Text style={styles.prefixText}>🇨🇲 +237</Text>
+            <View style={[styles.prefix, { borderColor: theme.border, backgroundColor: theme.surface2 }]}>
+              <Text style={[styles.prefixText, { color: theme.text }]}>🇨🇲 +237</Text>
             </View>
             <TextInput
-              style={[styles.input, error ? styles.inputError : null]}
+              style={[
+                styles.input,
+                { borderColor: theme.border, backgroundColor: theme.surface2, color: theme.text },
+                error ? styles.inputError : null,
+              ]}
               placeholder="6XX XXX XXX"
               placeholderTextColor={COLORS.gray400}
               keyboardType="phone-pad"
@@ -113,17 +121,17 @@ export default function RegisterScreen() {
           </TouchableOpacity>
 
           <View style={styles.divider}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>ou</Text>
-            <View style={styles.dividerLine} />
+            <View style={[styles.dividerLine, { backgroundColor: theme.border }]} />
+            <Text style={[styles.dividerText, { color: theme.muted }]}>ou</Text>
+            <View style={[styles.dividerLine, { backgroundColor: theme.border }]} />
           </View>
 
           <TouchableOpacity
-            style={styles.btnGhost}
+            style={[styles.btnGhost, { borderColor: theme.border, backgroundColor: theme.surface }]}
             onPress={() => router.push("/auth/login")}
             activeOpacity={0.8}
           >
-            <Text style={styles.btnGhostText}>
+            <Text style={[styles.btnGhostText, { color: theme.text }]}>
               J&apos;ai d&eacute;j&agrave; un compte !
             </Text>
           </TouchableOpacity>
@@ -134,7 +142,7 @@ export default function RegisterScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.white },
+  safe: { flex: 1 },
   scroll: { flexGrow: 1, padding: SPACING.xxl, paddingTop: 48 },
   logoRow: {
     flexDirection: "row",
@@ -159,20 +167,17 @@ const styles = StyleSheet.create({
   brandName: {
     fontWeight: FONT_WEIGHT.bold,
     fontSize: FONT_SIZE.xl,
-    color: COLORS.navy700,
     letterSpacing: 0.5,
   },
   heading: {
     fontWeight: FONT_WEIGHT.extrabold,
     fontSize: FONT_SIZE.xxl,
-    color: COLORS.navy800,
     textAlign: "center",
     lineHeight: 34,
     marginBottom: SPACING.sm,
   },
   sub: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.gray400,
     textAlign: "center",
     marginBottom: SPACING.xxl,
   },
@@ -182,14 +187,11 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     borderRadius: RADIUS.md,
     borderWidth: 1.5,
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray50,
     justifyContent: "center",
   },
   prefixText: {
     fontSize: FONT_SIZE.sm,
     fontWeight: FONT_WEIGHT.semibold,
-    color: COLORS.gray700,
   },
   input: {
     flex: 1,
@@ -197,10 +199,7 @@ const styles = StyleSheet.create({
     paddingVertical: 13,
     borderRadius: RADIUS.md,
     borderWidth: 1.5,
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray50,
     fontSize: FONT_SIZE.md,
-    color: COLORS.gray900,
   },
   inputError: { borderColor: COLORS.red500 },
   errorText: {
@@ -228,17 +227,15 @@ const styles = StyleSheet.create({
     gap: SPACING.sm,
     marginVertical: SPACING.lg,
   },
-  dividerLine: { flex: 1, height: 1, backgroundColor: COLORS.gray200 },
-  dividerText: { fontSize: FONT_SIZE.xs, color: COLORS.gray400 },
+  dividerLine: { flex: 1, height: 1 },
+  dividerText: { fontSize: FONT_SIZE.xs },
   btnGhost: {
     borderWidth: 1.5,
-    borderColor: COLORS.gray200,
     borderRadius: RADIUS.md,
     paddingVertical: 13,
     alignItems: "center",
   },
   btnGhostText: {
-    color: COLORS.gray600,
     fontWeight: FONT_WEIGHT.semibold,
     fontSize: FONT_SIZE.md,
   },
