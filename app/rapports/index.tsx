@@ -234,10 +234,10 @@ export default function RapportsFullScreen() {
         <Text style={[st.title, { color: theme.text }]}>Rapports Financiers</Text>
         <View style={{ flexDirection: "row", gap: 8 }}>
           <TouchableOpacity
-            style={st.exportBtn}
+            style={[st.exportBtn, { borderColor: theme.border, backgroundColor: theme.surface }]}
             onPress={() => handleExport("PDF")}
           >
-            <Text style={st.exportBtnTxt}>PDF</Text>
+            <Text style={[st.exportBtnTxt, { color: theme.text }]}>PDF</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[st.exportBtn, { backgroundColor: COLORS.green600 }]}
@@ -289,9 +289,9 @@ export default function RapportsFullScreen() {
             <IconSymbol
               name="chart.pie"
               style={{ width: 20, height: 20, marginRight: 8 }}
-              color={COLORS.gray800}
+              color={theme.text}
             />
-            <Text style={st.cardTitle}>Répartition des opérations</Text>
+            <Text style={[st.cardTitle, { color: theme.text }]}>Répartition des opérations</Text>
           </View>
           {[
             { label: "Ventes", value: totalVentes, color: COLORS.green500 },
@@ -301,7 +301,7 @@ export default function RapportsFullScreen() {
             { label: "Charges", value: totalCharges, color: COLORS.navy700 },
           ].map((item, i) => (
             <View key={i} style={st.barRow}>
-              <Text style={st.barLabel}>{item.label}</Text>
+              <Text style={[st.barLabel, { color: theme.muted }]}>{item.label}</Text>
               <View style={{ flex: 1 }}>
                 <MiniBar pct={(item.value / maxVal) * 100} color={item.color} />
               </View>
@@ -323,9 +323,9 @@ export default function RapportsFullScreen() {
             <IconSymbol
               name="chart.line.uptrend.xyaxis"
               style={{ width: 20, height: 20, marginRight: 8 }}
-              color={COLORS.gray800}
+              color={theme.text}
             />
-            <Text style={st.cardTitle}>Indicateurs de Performance</Text>
+            <Text style={[st.cardTitle, { color: theme.text }]}>Indicateurs de Performance</Text>
             {!isPro && (
               <Text style={st.proHint}> (aperçu)</Text>
             )}
@@ -341,7 +341,7 @@ export default function RapportsFullScreen() {
               ]}
             >
               <Text style={st.kpiVal}>{Math.round(txMarge)}%</Text>
-              <Text style={st.kpiLbl}>Taux de marge</Text>
+              <Text style={[st.kpiLbl, { color: theme.muted }]}>Taux de marge</Text>
             </View>
             <View
               style={[
@@ -352,7 +352,7 @@ export default function RapportsFullScreen() {
               <Text style={[st.kpiVal, { color: "#1d4ed8" }]}>
                 {Math.round(txRecouvrement)}%
               </Text>
-              <Text style={st.kpiLbl}>Taux recouvrement</Text>
+              <Text style={[st.kpiLbl, { color: theme.muted }]}>Taux recouvrement</Text>
             </View>
             <View
               style={[
@@ -361,7 +361,7 @@ export default function RapportsFullScreen() {
               ]}
             >
               <Text style={[st.kpiVal, { color: "#78350f" }]}>{nbVentes}</Text>
-              <Text style={st.kpiLbl}>Nb. ventes</Text>
+              <Text style={[st.kpiLbl, { color: theme.muted }]}>Nb. ventes</Text>
             </View>
             <View
               style={[
@@ -374,7 +374,7 @@ export default function RapportsFullScreen() {
                   ? fmt(outstandingDebt)
                   : local.nbDettes}
               </Text>
-              <Text style={st.kpiLbl}>
+              <Text style={[st.kpiLbl, { color: theme.muted }]}>
                 {outstandingDebt != null ? "Dettes en cours" : "Dettes actives"}
               </Text>
             </View>
@@ -392,14 +392,14 @@ export default function RapportsFullScreen() {
             <IconSymbol
               name="building.2"
               style={{ width: 20, height: 20, marginRight: 8 }}
-              color={COLORS.gray800}
+              color={theme.text}
             />
-            <Text style={st.cardTitle}>
+            <Text style={[st.cardTitle, { color: theme.text }]}>
               Charges Fixes — {fmt(totalCharges)}/mois
             </Text>
           </View>
           {chargeItems.length === 0 && (
-            <Text style={st.emptyTxt}>Aucune charge enregistrée</Text>
+            <Text style={[st.emptyTxt, { color: theme.muted }]}>Aucune charge enregistrée</Text>
           )}
           {chargeItems.map((c, i) => {
             const pct =
@@ -422,7 +422,7 @@ export default function RapportsFullScreen() {
                       justifyContent: "space-between",
                     }}
                   >
-                    <Text style={st.chargeName}>{c.label}</Text>
+                    <Text style={[st.chargeName, { color: theme.text }]}>{c.label}</Text>
                     <Text style={[st.chargeAmt, { color }]}>
                       {fmt(c.amount)}
                     </Text>
@@ -481,12 +481,12 @@ export default function RapportsFullScreen() {
             <IconSymbol
               name="calendar"
               style={{ width: 20, height: 20, marginRight: 8 }}
-              color={COLORS.gray800}
+              color={theme.text}
             />
-            <Text style={st.cardTitle}>Évolution — {periodLabel}</Text>
+            <Text style={[st.cardTitle, { color: theme.text }]}>Évolution — {periodLabel}</Text>
           </View>
           {dailyBars.length === 0 ? (
-            <Text style={st.emptyTxt}>Pas encore de données ce mois</Text>
+            <Text style={[st.emptyTxt, { color: theme.muted }]}>Pas encore de données ce mois</Text>
           ) : (
             <View
               style={{
