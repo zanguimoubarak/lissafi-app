@@ -16,12 +16,14 @@ import * as WebBrowser from "expo-web-browser";
 import { useApp } from "@/context/AppContext";
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   SPACING,
   RADIUS,
   SHADOW,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import {
   APP_VERSION,
   PRIVACY_POLICY_URL,
@@ -43,6 +45,9 @@ function SettingRow({
   onPress,
   danger,
   right,
+  textColor,
+  subColor,
+  arrowColor,
 }: {
   icon: string;
   label: string;
@@ -50,6 +55,9 @@ function SettingRow({
   onPress?: () => void;
   danger?: boolean;
   right?: React.ReactNode;
+  textColor: string;
+  subColor: string;
+  arrowColor: string;
 }) {
   return (
     <TouchableOpacity
@@ -66,22 +74,24 @@ function SettingRow({
         />
       </View>
       <View style={st.rowBody}>
-        <Text style={[st.rowLabel, danger ? { color: COLORS.red500 } : null]}>
+        <Text style={[st.rowLabel, { color: textColor }, danger ? { color: COLORS.red500 } : null]}>
           {label}
         </Text>
         {sub ? (
-          <Text style={st.rowSub} numberOfLines={2}>
+          <Text style={[st.rowSub, { color: subColor }]} numberOfLines={2}>
             {sub}
           </Text>
         ) : null}
       </View>
-      {right ?? (onPress ? <Text style={st.rowArrow}>›</Text> : null)}
+      {right ?? (onPress ? <Text style={[st.rowArrow, { color: arrowColor }]}>›</Text> : null)}
     </TouchableOpacity>
   );
 }
 
 export default function ParametresScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { user, setUser, logout } = useApp();
   const [notifs, setNotifs] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
@@ -156,9 +166,9 @@ export default function ParametresScreen() {
   const hoursLabel = formatWorkHours(user?.workHoursStart, user?.workHoursEnd);
 
   return (
-    <SafeAreaView style={st.safe}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={st.profileCard}>
+        <View style={[st.profileCard, { backgroundColor: COLORS.primaryDark }]}>
           <View style={st.avatar}>
             <Text style={st.avatarTxt}>{user?.boutiqueName?.[0] ?? "B"}</Text>
           </View>
@@ -217,11 +227,14 @@ export default function ParametresScreen() {
         )}
 
         <View style={st.section}>
-          <Text style={st.sectionTitle}>MON PROFIL</Text>
-          <View style={st.card}>
+          <Text style={[st.sectionTitle, { color: theme.muted }]}>MON PROFIL</Text>
+          <View style={[st.card, { backgroundColor: theme.surface }]}>
             <SettingRow
               icon="store"
               label="Nom de la boutique"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               sub={user?.boutiqueName || "Non renseigné"}
               onPress={() => router.push("/settings/edit-profile")}
             />
@@ -229,18 +242,27 @@ export default function ParametresScreen() {
             <SettingRow
               icon="phone"
               label="Numéro de téléphone"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               sub={user?.phone || "Non renseigné"}
             />
             <View style={st.divider} />
             <SettingRow
               icon="key"
               label="Modifier le PIN"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               onPress={() => router.push("/settings/change-pin")}
             />
             <View style={st.divider} />
             <SettingRow
               icon="bag"
               label="Type d'activité"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               sub={getActivityLabel(user?.activityType)}
               onPress={() => router.push("/settings/activity")}
             />
@@ -248,6 +270,9 @@ export default function ParametresScreen() {
             <SettingRow
               icon="location"
               label="Adresse"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               sub={user?.address?.trim() || "Non renseignée"}
               onPress={() => router.push("/settings/edit-profile")}
             />
@@ -255,11 +280,14 @@ export default function ParametresScreen() {
         </View>
 
         <View style={st.section}>
-          <Text style={st.sectionTitle}>APPLICATION</Text>
-          <View style={st.card}>
+          <Text style={[st.sectionTitle, { color: theme.muted }]}>APPLICATION</Text>
+          <View style={[st.card, { backgroundColor: theme.surface }]}>
             <SettingRow
               icon="bell"
               label="Notifications Push"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               right={
                 <Switch
                   value={notifs}
@@ -272,6 +300,9 @@ export default function ParametresScreen() {
             <SettingRow
               icon="moon"
               label="Thème sombre"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               right={
                 <Switch
                   value={darkMode}
@@ -284,26 +315,35 @@ export default function ParametresScreen() {
             <SettingRow
               icon="clock"
               label="Heures de gestion"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               sub={hoursLabel}
               onPress={() => router.push("/settings/work-hours")}
             />
             <View style={st.divider} />
-            <SettingRow icon="globe" label="Langue" sub="Français" />
+            <SettingRow icon="globe" label="Langue" textColor={theme.text} subColor={theme.muted} arrowColor={theme.muted} sub="Français" />
           </View>
         </View>
 
         <View style={st.section}>
-          <Text style={st.sectionTitle}>GESTION</Text>
-          <View style={st.card}>
+          <Text style={[st.sectionTitle, { color: theme.muted }]}>GESTION</Text>
+          <View style={[st.card, { backgroundColor: theme.surface }]}>
             <SettingRow
               icon="package"
               label="Mon Stock"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               onPress={() => router.push("/stock")}
             />
             <View style={st.divider} />
             <SettingRow
               icon="banknote"
               label="Charges fixes"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               onPress={() => router.push("/charges")}
             />
             <View style={st.divider} />
@@ -312,12 +352,18 @@ export default function ParametresScreen() {
                 <SettingRow
                   icon="person.2"
                   label="Dettes Clients"
+                  textColor={theme.text}
+                  subColor={theme.muted}
+                  arrowColor={theme.muted}
                   onPress={() => router.push("/clients")}
                 />
                 <View style={st.divider} />
                 <SettingRow
                   icon="store"
                   label="Ma Boutique en ligne"
+                  textColor={theme.text}
+                  subColor={theme.muted}
+                  arrowColor={theme.muted}
                   onPress={() => router.push("/boutique")}
                 />
                 <View style={st.divider} />
@@ -326,17 +372,23 @@ export default function ParametresScreen() {
             <SettingRow
               icon="chart.bar"
               label="Rapports"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               onPress={() => router.push("/rapports")}
             />
           </View>
         </View>
 
         <View style={st.section}>
-          <Text style={st.sectionTitle}>AIDE & SUPPORT</Text>
-          <View style={st.card}>
+          <Text style={[st.sectionTitle, { color: theme.muted }]}>AIDE & SUPPORT</Text>
+          <View style={[st.card, { backgroundColor: theme.surface }]}>
             <SettingRow
               icon="message"
               label="Support WhatsApp"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               sub="Réponse sous 24h"
               onPress={openWhatsApp}
             />
@@ -344,12 +396,18 @@ export default function ParametresScreen() {
             <SettingRow
               icon="file"
               label="Conditions d'utilisation"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               onPress={openTerms}
             />
             <View style={st.divider} />
             <SettingRow
               icon="shield"
               label="Politique de confidentialité"
+              textColor={theme.text}
+              subColor={theme.muted}
+              arrowColor={theme.muted}
               onPress={openPrivacy}
             />
           </View>
@@ -357,7 +415,7 @@ export default function ParametresScreen() {
 
         <View style={st.section}>
           <View style={st.card}>
-            <SettingRow icon="logout" label="Déconnexion" danger onPress={handleLogout} />
+            <SettingRow icon="logout" label="Déconnexion" textColor={theme.text} subColor={theme.muted} arrowColor={theme.muted} danger onPress={handleLogout} />
           </View>
         </View>
 

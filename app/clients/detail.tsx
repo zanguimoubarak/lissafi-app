@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import type { Client } from "@/context/AppContext";
 import { ApiError } from "@/services/api";
 import * as clientsService from "@/services/clients.service";
@@ -31,6 +33,8 @@ function fmt(n: number) {
 
 export default function ClientDetailScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { id } = useLocalSearchParams<{ id: string }>();
   const [client, setClient] = useState<Client | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -90,7 +94,7 @@ export default function ClientDetailScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={st.safe}>
+      <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
         <View style={st.loadingBox}>
           <ActivityIndicator color={COLORS.green600} size="small" />
         </View>
@@ -100,12 +104,12 @@ export default function ClientDetailScreen() {
 
   if (!client || error) {
     return (
-      <SafeAreaView style={st.safe}>
+      <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
         <TouchableOpacity style={st.backBtn} onPress={() => router.back()}>
           <IconSymbol name="chevron.left" size={24} color={COLORS.gray700} />
         </TouchableOpacity>
         <View style={st.loadingBox}>
-          <Text style={st.errorTxt}>{error || "Client introuvable"}</Text>
+          <Text style={[st.errorTxt, { color: theme.muted }]}>{error || "Client introuvable"}</Text>
         </View>
       </SafeAreaView>
     );
@@ -114,12 +118,12 @@ export default function ClientDetailScreen() {
   const hasDebt = client.outstandingBalance > 0;
 
   return (
-    <SafeAreaView style={st.safe}>
-      <View style={st.header}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
+      <View style={[st.header, { backgroundColor: theme.surface }]}>
         <TouchableOpacity style={st.backBtn} onPress={() => router.back()}>
-          <IconSymbol name="chevron.left" size={24} color={COLORS.gray700} />
+          <IconSymbol name="chevron.left" size={24} color={theme.text} />
         </TouchableOpacity>
-        <Text style={st.title}>{client.name}</Text>
+        <Text style={[st.title, { color: theme.text }]}>{client.name}</Text>
         <View style={{ width: 36 }} />
       </View>
 
@@ -180,11 +184,11 @@ export default function ClientDetailScreen() {
         )}
 
         <View style={st.section}>
-          <Text style={st.sectionTitle}>{client.name} — Historique</Text>
+          <Text style={[st.sectionTitle, { color: theme.text }]}>{client.name} — Historique</Text>
           {client.visits.length === 0 && (
             <View style={st.empty}>
               <IconSymbol name="tray" size={38} color={COLORS.gray300} />
-              <Text style={st.emptyTxt}>Aucune visite enregistrée</Text>
+              <Text style={[st.emptyTxt, { color: theme.muted }]}>Aucune visite enregistrée</Text>
             </View>
           )}
           {client.visits.map((v) => {
@@ -193,13 +197,13 @@ export default function ClientDetailScreen() {
             return (
               <View key={v.id} style={st.visitRow}>
                 <View style={st.visitDate}>
-                  <IconSymbol name="calendar" size={14} color={COLORS.gray500} />
-                  <Text style={st.visitDateTxt}>{v.visitDate}</Text>
+                  <IconSymbol name="calendar" size={14} color={theme.muted} />
+                  <Text style={[st.visitDateTxt, { color: theme.muted }]}>{v.visitDate}</Text>
                 </View>
                 <View style={st.visitBody}>
                   <View style={st.visitAmtRow}>
-                    <IconSymbol name="bag" size={16} color={COLORS.gray500} />
-                    <Text style={st.visitAmt}>{fmt(v.amount)}</Text>
+                    <IconSymbol name="bag" size={16} color={theme.muted} />
+                    <Text style={[st.visitAmt, { color: theme.text }]}>{fmt(v.amount)}</Text>
                     <View
                       style={[
                         st.visitBadge,
@@ -225,9 +229,9 @@ export default function ClientDetailScreen() {
                     </View>
                   </View>
                   {v.dueDate && !isPaid && (
-                    <Text style={st.dueDate}>Échéance: {v.dueDate}</Text>
+                    <Text style={[st.dueDate, { color: theme.muted }]}>Échéance: {v.dueDate}</Text>
                   )}
-                  {v.notes && <Text style={st.visitNote}>{v.notes}</Text>}
+                  {v.notes && <Text style={[st.visitNote, { color: theme.muted }]}>{v.notes}</Text>}
                 </View>
               </View>
             );
@@ -247,7 +251,7 @@ export default function ClientDetailScreen() {
 }
 
 const st = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.gray50 },
+  safe: { flex: 1 },
   loadingBox: { flex: 1, alignItems: "center", justifyContent: "center" },
   errorTxt: { color: COLORS.gray500, fontSize: FONT_SIZE.md },
   header: {

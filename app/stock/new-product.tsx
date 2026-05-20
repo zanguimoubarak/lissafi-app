@@ -1,12 +1,14 @@
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useApp } from "@/context/AppContext";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -39,6 +41,8 @@ const UNITS = [
 
 export default function NewProductScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { addProduct } = useApp();
   const [name, setName] = useState("");
   const [unit, setUnit] = useState("pièce");
@@ -123,20 +127,20 @@ export default function NewProductScreen() {
   };
 
   return (
-    <SafeAreaView style={st.safe}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
-        <View style={st.header}>
+        <View style={[st.header, { borderBottomColor: theme.border }]}>
           <TouchableOpacity style={st.back} onPress={() => router.back()}>
             <IconSymbol
               name="xmark"
               style={{ width: 16, height: 16 }}
-              color={COLORS.gray600}
+              color={theme.muted}
             />
           </TouchableOpacity>
-          <Text style={st.title}>Nouvel Article</Text>
+          <Text style={[st.title, { color: theme.text }]}>Nouvel Article</Text>
           <View style={{ width: 36 }} />
         </View>
 
@@ -158,10 +162,10 @@ export default function NewProductScreen() {
                   style={{ width: 16, height: 16, marginRight: 6 }}
                   color={COLORS.gray700}
                 />
-                <Text style={st.label}>Nom du produit</Text>
+                <Text style={[st.label, { color: theme.text }]}>Nom du produit</Text>
               </View>
               <TextInput
-                style={st.input}
+                style={[st.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
                 placeholder="Ex: Sac de Riz 50kg"
                 placeholderTextColor={COLORS.gray400}
                 value={name}
@@ -171,8 +175,8 @@ export default function NewProductScreen() {
 
             <View style={st.field}>
               <View style={st.labelRow}>
-                <IconSymbol name="tag" size={16} color={COLORS.gray700} />
-                <Text style={st.label}>Unité</Text>
+                <IconSymbol name="tag" size={16} color={theme.muted} />
+                <Text style={[st.label, { color: theme.text }]}>Unité</Text>
               </View>
               <ScrollView
                 horizontal
@@ -217,10 +221,10 @@ export default function NewProductScreen() {
                     style={{ width: 16, height: 16, marginRight: 6 }}
                     color={COLORS.gray700}
                   />
-                  <Text style={st.label}>Prix d&apos;achat (FCFA)</Text>
+                  <Text style={[st.label, { color: theme.text }]}>Prix d&apos;achat (FCFA)</Text>
                 </View>
                 <TextInput
-                  style={st.input}
+                  style={[st.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
                   placeholder="13 000"
                   placeholderTextColor={COLORS.gray400}
                   keyboardType="numeric"
@@ -241,10 +245,10 @@ export default function NewProductScreen() {
                     style={{ width: 16, height: 16, marginRight: 6 }}
                     color={COLORS.gray700}
                   />
-                  <Text style={st.label}>Prix de vente (FCFA)</Text>
+                  <Text style={[st.label, { color: theme.text }]}>Prix de vente (FCFA)</Text>
                 </View>
                 <TextInput
-                  style={st.input}
+                  style={[st.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
                   placeholder="15 000"
                   placeholderTextColor={COLORS.gray400}
                   keyboardType="numeric"

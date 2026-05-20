@@ -1,12 +1,14 @@
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { ActivityType, useApp } from "@/context/AppContext";
 import { ApiError } from "@/services/api";
 import * as authService from "@/services/auth.service";
@@ -33,6 +35,8 @@ const ACTIVITIES: { id: ActivityType; label: string; icon: string }[] = [
 
 export default function SettingsActivityScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { user, setUser } = useApp();
   const [selected, setSelected] = useState<ActivityType>(
     user?.activityType ?? "commerce",
@@ -61,12 +65,12 @@ export default function SettingsActivityScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
+      <View style={[styles.header, { backgroundColor: theme.surface, borderBottomColor: theme.border }]}>
         <TouchableOpacity style={styles.close} onPress={() => router.back()}>
-          <IconSymbol name="xmark" size={22} color={COLORS.gray600} />
+          <IconSymbol name="xmark" size={22} color={theme.muted} />
         </TouchableOpacity>
-        <Text style={styles.title}>Type d&apos;activité</Text>
+        <Text style={[styles.title, { color: theme.text }]}>Type d&apos;activité</Text>
         <View style={styles.close} />
       </View>
 
@@ -76,7 +80,11 @@ export default function SettingsActivityScreen() {
           return (
             <TouchableOpacity
               key={activity.id}
-              style={[styles.card, isActive ? styles.cardActive : null]}
+              style={[
+                styles.card,
+                { backgroundColor: theme.surface, borderColor: theme.border },
+                isActive ? styles.cardActive : null,
+              ]}
               onPress={() => setSelected(activity.id)}
               activeOpacity={0.85}
             >
@@ -84,10 +92,10 @@ export default function SettingsActivityScreen() {
                 <IconSymbol
                   name={activity.icon}
                   style={{ width: 22, height: 22 }}
-                  color={isActive ? COLORS.white : COLORS.gray600}
+                  color={isActive ? COLORS.white : theme.text}
                 />
               </View>
-              <Text style={[styles.cardLabel, isActive ? styles.cardLabelActive : null]}>
+              <Text style={[styles.cardLabel, { color: theme.text }, isActive ? styles.cardLabelActive : null]}>
                 {activity.label}
               </Text>
             </TouchableOpacity>
@@ -96,7 +104,7 @@ export default function SettingsActivityScreen() {
         {error ? <Text style={styles.error}>{error}</Text> : null}
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { backgroundColor: theme.surface, borderTopColor: theme.border }]}>
         <TouchableOpacity
           style={[styles.submit, isSubmitting ? styles.disabled : null]}
           disabled={isSubmitting}
@@ -116,11 +124,9 @@ export default function SettingsActivityScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { backgroundColor: COLORS.gray50, flex: 1 },
+  safe: { flex: 1 },
   header: {
     alignItems: "center",
-    backgroundColor: COLORS.white,
-    borderBottomColor: COLORS.gray100,
     borderBottomWidth: 1,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -140,15 +146,12 @@ const styles = StyleSheet.create({
     fontWeight: FONT_WEIGHT.bold,
   },
   title: {
-    color: COLORS.navy800,
     fontSize: FONT_SIZE.lg,
     fontWeight: FONT_WEIGHT.extrabold,
   },
   body: { flex: 1, padding: SPACING.lg },
   card: {
     alignItems: "center",
-    backgroundColor: COLORS.white,
-    borderColor: COLORS.gray200,
     borderRadius: RADIUS.lg,
     borderWidth: 1.5,
     flexDirection: "row",
@@ -171,7 +174,6 @@ const styles = StyleSheet.create({
   },
   iconWrapActive: { backgroundColor: "rgba(255,255,255,0.2)" },
   cardLabel: {
-    color: COLORS.gray800,
     flex: 1,
     fontSize: FONT_SIZE.md,
     fontWeight: FONT_WEIGHT.semibold,
@@ -184,8 +186,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   footer: {
-    backgroundColor: COLORS.white,
-    borderTopColor: COLORS.gray100,
     borderTopWidth: 1,
     padding: SPACING.lg,
   },

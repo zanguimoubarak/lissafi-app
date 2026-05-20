@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { COLORS, FONT_SIZE, FONT_WEIGHT, SPACING, RADIUS, SHADOW } from '@/constants/theme';
+import { COLORS, Colors, FONT_SIZE, FONT_WEIGHT, SPACING, RADIUS, SHADOW } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 import { ApiError } from '@/services/api';
 import * as authService from '@/services/auth.service';
 
@@ -10,6 +11,8 @@ const KEYS = ['1','2','3','4','5','6','7','8','9','','0','⌫'];
 
 export default function PinScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { userId = "" } = useLocalSearchParams<{ userId: string }>();
   const [pin, setPin] = useState('');
   const [error, setError] = useState('');
@@ -58,14 +61,14 @@ export default function PinScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <Text style={styles.backText}>← Retour</Text>
       </TouchableOpacity>
 
       <View style={styles.content}>
-        <Text style={styles.heading}>Sécurisez vos{'\n'}données financières</Text>
-        <Text style={styles.sub}>Créer un PIN de 4 chiffres</Text>
+        <Text style={[styles.heading, { color: theme.text }]}>Sécurisez vos{'\n'}données financières</Text>
+        <Text style={[styles.sub, { color: theme.muted }]}>Créer un PIN de 4 chiffres</Text>
 
         <View style={styles.dotsRow}>
           {[0,1,2,3].map(i => (
@@ -103,12 +106,12 @@ export default function PinScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.white },
+  safe: { flex: 1 },
   back: { padding: SPACING.lg },
   backText: { color: COLORS.green600, fontWeight: FONT_WEIGHT.semibold, fontSize: FONT_SIZE.md },
   content: { flex: 1, alignItems: 'center', paddingHorizontal: SPACING.xxl },
-  heading: { fontWeight: FONT_WEIGHT.extrabold, fontSize: FONT_SIZE.xxl, color: COLORS.navy800, textAlign: 'center', lineHeight: 32, marginBottom: SPACING.sm },
-  sub: { fontSize: FONT_SIZE.sm, color: COLORS.gray500, marginBottom: SPACING.xxl },
+  heading: { fontWeight: FONT_WEIGHT.extrabold, fontSize: FONT_SIZE.xxl, textAlign: 'center', lineHeight: 32, marginBottom: SPACING.sm },
+  sub: { fontSize: FONT_SIZE.sm, marginBottom: SPACING.xxl },
   dotsRow: { flexDirection: 'row', gap: 16, marginBottom: SPACING.xxl },
   dot: { width: 20, height: 20, borderRadius: 10, borderWidth: 2, borderColor: COLORS.gray300, backgroundColor: COLORS.gray100 },
   dotFilled: { borderColor: COLORS.green500, backgroundColor: COLORS.green500 },

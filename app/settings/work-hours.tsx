@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useApp } from "@/context/AppContext";
 import { ApiError } from "@/services/api";
 import * as authService from "@/services/auth.service";
@@ -33,6 +35,8 @@ function normalizeTime(value: string): string {
 
 export default function WorkHoursScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { user, setUser } = useApp();
   const [workHoursStart, setWorkHoursStart] = useState(
     user?.workHoursStart ?? "08:00",
@@ -73,23 +77,23 @@ export default function WorkHoursScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
+      <View style={[styles.header, { borderBottomColor: theme.border }]}>
         <TouchableOpacity style={styles.close} onPress={() => router.back()}>
-          <IconSymbol name="xmark" size={22} color={COLORS.gray600} />
+          <IconSymbol name="xmark" size={22} color={theme.muted} />
         </TouchableOpacity>
-        <Text style={styles.title}>Heures de gestion</Text>
+        <Text style={[styles.title, { color: theme.text }]}>Heures de gestion</Text>
         <View style={styles.close} />
       </View>
 
       <View style={styles.body}>
-        <Text style={styles.hint}>
+        <Text style={[styles.hint, { color: theme.muted }]}>
           Indiquez vos heures d&apos;ouverture habituelles (format 24h).
         </Text>
 
-        <Text style={styles.label}>Ouverture</Text>
+        <Text style={[styles.label, { color: theme.text }]}>Ouverture</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
           value={workHoursStart}
           onChangeText={(value) => setWorkHoursStart(normalizeTime(value))}
           placeholder="08:00"
@@ -98,9 +102,9 @@ export default function WorkHoursScreen() {
           maxLength={5}
         />
 
-        <Text style={styles.label}>Fermeture</Text>
+        <Text style={[styles.label, { color: theme.text }]}>Fermeture</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, { backgroundColor: theme.surface2, borderColor: theme.border, color: theme.text }]}
           value={workHoursEnd}
           onChangeText={(value) => setWorkHoursEnd(normalizeTime(value))}
           placeholder="18:00"
@@ -112,7 +116,7 @@ export default function WorkHoursScreen() {
         {error ? <Text style={styles.error}>{error}</Text> : null}
       </View>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { borderTopColor: theme.border }]}>
         <TouchableOpacity
           style={[styles.submit, isSubmitting ? styles.disabled : null]}
           disabled={isSubmitting}
@@ -132,7 +136,7 @@ export default function WorkHoursScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { backgroundColor: COLORS.white, flex: 1 },
+  safe: { flex: 1 },
   header: {
     alignItems: "center",
     borderBottomColor: COLORS.gray100,

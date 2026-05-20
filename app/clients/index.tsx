@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import type { Client } from "@/context/AppContext";
 import { useApp } from "@/context/AppContext";
 import * as clientsService from "@/services/clients.service";
@@ -63,6 +65,8 @@ function ClientAvatar({ name, size = 40 }: { name: string; size?: number }) {
 
 export default function ClientsScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { user, clients: localClients, setClients } = useApp();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -147,12 +151,12 @@ export default function ClientsScreen() {
 
   if (!isPro) {
     return (
-      <SafeAreaView style={st.safe}>
-        <View style={st.header}>
+      <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
+        <View style={[st.header, { backgroundColor: theme.surface }]}>
           <TouchableOpacity style={st.back} onPress={() => router.back()}>
             <Text style={st.backTxt}>←</Text>
           </TouchableOpacity>
-          <Text style={st.title}>Dettes Clients</Text>
+          <Text style={[st.title, { color: theme.text }]}>Dettes Clients</Text>
           <View style={{ width: 36 }} />
         </View>
         <View style={st.proGate}>
@@ -181,12 +185,12 @@ export default function ClientsScreen() {
   const totalPurchases = items.reduce((s, c) => s + c.totalPurchases, 0);
 
   return (
-    <SafeAreaView style={st.safe}>
-      <View style={st.header}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
+      <View style={[st.header, { backgroundColor: theme.surface }]}>
         <TouchableOpacity style={st.back} onPress={() => router.back()}>
           <IconSymbol name="chevron.left" size={24} color={COLORS.gray700} />
         </TouchableOpacity>
-        <Text style={st.title}>Dettes Clients</Text>
+        <Text style={[st.title, { color: theme.text }]}>Dettes Clients</Text>
         <TouchableOpacity
           style={st.addBtn}
           onPress={() => router.push("/clients/new-client")}
@@ -213,9 +217,9 @@ export default function ClientsScreen() {
       ) : null}
 
       <View style={st.searchBox}>
-        <IconSymbol name="magnifyingglass" size={20} color={COLORS.gray400} />
+        <IconSymbol name="magnifyingglass" size={20} color={theme.muted} />
         <TextInput
-          style={st.searchInput}
+          style={[st.searchInput, { color: theme.text }]}
           placeholder="Rechercher client / téléphone..."
           placeholderTextColor={COLORS.gray400}
           value={search}
@@ -243,7 +247,7 @@ export default function ClientsScreen() {
           {items.length === 0 && (
             <View style={st.empty}>
               <IconSymbol name="person" size={40} color={COLORS.gray300} />
-              <Text style={st.emptyTxt}>Aucun client trouvé</Text>
+              <Text style={[st.emptyTxt, { color: theme.muted }]}>Aucun client trouvé</Text>
             </View>
           )}
           {items.map((c) => {
@@ -262,8 +266,8 @@ export default function ClientsScreen() {
               >
                 <ClientAvatar name={c.name} />
                 <View style={st.clientBody}>
-                  <Text style={st.clientName}>{c.name}</Text>
-                  <Text style={st.clientMeta}>
+                  <Text style={[st.clientName, { color: theme.text }]}>{c.name}</Text>
+                  <Text style={[st.clientMeta, { color: theme.muted }]}>
                     {c.phone} · {c.visits.length || 0} visite
                     {(c.visits.length || 0) > 1 ? "s" : ""}
                   </Text>
@@ -288,7 +292,7 @@ export default function ClientsScreen() {
                     </View>
                   )}
                   {!isLate && c.outstandingBalance > 0 && (
-                    <Text style={st.creditTag}>Dette active</Text>
+                    <Text style={[st.creditTag, { color: theme.muted }]}>Dette active</Text>
                   )}
                 </View>
               </TouchableOpacity>
@@ -307,7 +311,7 @@ export default function ClientsScreen() {
 }
 
 const st = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.gray50 },
+  safe: { flex: 1 },
   loadingBox: { alignItems: "center", paddingTop: 48 },
   fallbackHint: {
     color: COLORS.amber500,

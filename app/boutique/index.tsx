@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useApp } from "@/context/AppContext";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -28,6 +30,8 @@ function fmt(n: number) {
 
 export default function BoutiqueScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { user, products } = useApp();
   const isPro = user?.plan === "free";
 
@@ -68,12 +72,12 @@ export default function BoutiqueScreen() {
 
   if (!isPro) {
     return (
-      <SafeAreaView style={st.safe}>
-        <View style={st.header}>
+      <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
+        <View style={[st.header, { backgroundColor: theme.surface }]}>
           <TouchableOpacity style={st.back} onPress={() => router.back()}>
-            <IconSymbol name="chevron.left" size={24} color={COLORS.gray700} />
+            <IconSymbol name="chevron.left" size={24} color={theme.text} />
           </TouchableOpacity>
-          <Text style={st.title}>Boutique en Ligne</Text>
+          <Text style={[st.title, { color: theme.text }]}>Boutique en Ligne</Text>
           <View style={{ width: 36 }} />
         </View>
         <View style={st.proGate}>
@@ -96,7 +100,7 @@ export default function BoutiqueScreen() {
             ].map((f) => (
               <View key={f.label} style={st.featureItem}>
                 <IconSymbol name={f.icon} size={16} color={COLORS.green600} />
-                <Text style={st.featureText}>{f.label}</Text>
+                <Text style={[st.featureText, { color: theme.text }]}>{f.label}</Text>
               </View>
             ))}
           </View>
@@ -113,12 +117,12 @@ export default function BoutiqueScreen() {
   }
 
   return (
-    <SafeAreaView style={st.safe}>
-      <View style={st.header}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
+      <View style={[st.header, { backgroundColor: theme.surface }]}>
         <TouchableOpacity style={st.back} onPress={() => router.back()}>
-          <IconSymbol name="chevron.left" size={24} color={COLORS.gray700} />
+          <IconSymbol name="chevron.left" size={24} color={theme.text} />
         </TouchableOpacity>
-        <Text style={st.title}>Ma Boutique en Ligne</Text>
+        <Text style={[st.title, { color: theme.text }]}>Ma Boutique en Ligne</Text>
         <View style={{ width: 36 }} />
       </View>
 
@@ -147,24 +151,24 @@ export default function BoutiqueScreen() {
         </View>
 
         {/* URL & Actions */}
-        <View style={st.urlCard}>
+        <View style={[st.urlCard, { backgroundColor: theme.surface }]}>
           <View style={st.urlLabelRow}>
-            <IconSymbol name="share" size={16} color={COLORS.gray500} />
-            <Text style={st.urlLabel}>Lien de votre boutique</Text>
+            <IconSymbol name="share" size={16} color={theme.muted} />
+            <Text style={[st.urlLabel, { color: theme.muted }]}>Lien de votre boutique</Text>
           </View>
-          <View style={st.urlRow}>
+          <View style={[st.urlRow, { backgroundColor: theme.surface2, borderColor: theme.border }]}>
             <Text style={st.urlText} numberOfLines={1}>
               {boutiqueUrl}
             </Text>
           </View>
           <View style={st.actionRow}>
-            <TouchableOpacity style={st.actionBtn} onPress={handleShare}>
-              <IconSymbol name="share" size={18} color={COLORS.gray700} />
-              <Text style={st.actionBtnTxt}>Partager</Text>
+            <TouchableOpacity style={[st.actionBtn, { backgroundColor: theme.surface2 }]} onPress={handleShare}>
+              <IconSymbol name="share" size={18} color={theme.text} />
+              <Text style={[st.actionBtnTxt, { color: theme.text }]}>Partager</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={st.actionBtn} onPress={handleQR}>
-              <IconSymbol name="phone" size={18} color={COLORS.gray700} />
-              <Text style={st.actionBtnTxt}>QR Code</Text>
+            <TouchableOpacity style={[st.actionBtn, { backgroundColor: theme.surface2 }]} onPress={handleQR}>
+              <IconSymbol name="phone" size={18} color={theme.text} />
+              <Text style={[st.actionBtnTxt, { color: theme.text }]}>QR Code</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[st.actionBtn, { backgroundColor: "#25D366" }]}
@@ -182,20 +186,20 @@ export default function BoutiqueScreen() {
 
         {/* Stats */}
         <View style={st.statsRow}>
-          <View style={st.statCard}>
+          <View style={[st.statCard, { backgroundColor: theme.surface }]}>
             <IconSymbol name="visibility" size={24} color={COLORS.green600} />
-            <Text style={st.statVal}>{statsViews}</Text>
-            <Text style={st.statLbl}>Vues ce mois</Text>
+            <Text style={[st.statVal, { color: theme.text }]}>{statsViews}</Text>
+            <Text style={[st.statLbl, { color: theme.muted }]}>Vues ce mois</Text>
           </View>
-          <View style={st.statCard}>
+          <View style={[st.statCard, { backgroundColor: theme.surface }]}>
             <IconSymbol name="phone" size={24} color={COLORS.green600} />
-            <Text style={st.statVal}>{statsClicks}</Text>
-            <Text style={st.statLbl}>Clics contact</Text>
+            <Text style={[st.statVal, { color: theme.text }]}>{statsClicks}</Text>
+            <Text style={[st.statLbl, { color: theme.muted }]}>Clics contact</Text>
           </View>
-          <View style={st.statCard}>
+          <View style={[st.statCard, { backgroundColor: theme.surface }]}>
             <IconSymbol name="package" size={24} color={COLORS.green600} />
-            <Text style={st.statVal}>{products.length}</Text>
-            <Text style={st.statLbl}>Produits visibles</Text>
+            <Text style={[st.statVal, { color: theme.text }]}>{products.length}</Text>
+            <Text style={[st.statLbl, { color: theme.muted }]}>Produits visibles</Text>
           </View>
         </View>
 
@@ -203,8 +207,8 @@ export default function BoutiqueScreen() {
         <View style={st.section}>
           <View style={st.sectionHeader}>
             <View style={st.sectionTitleRow}>
-              <IconSymbol name="message" size={18} color={COLORS.gray800} />
-              <Text style={st.sectionTitle}>Message de bienvenue</Text>
+              <IconSymbol name="message" size={18} color={theme.text} />
+              <Text style={[st.sectionTitle, { color: theme.text }]}>Message de bienvenue</Text>
             </View>
             <TouchableOpacity onPress={() => setEditing((e) => !e)}>
               <Text
@@ -220,15 +224,15 @@ export default function BoutiqueScreen() {
           </View>
           {editing ? (
             <TextInput
-              style={st.welcomeInput}
+              style={[st.welcomeInput, { backgroundColor: theme.surface, color: theme.text }]}
               value={welcome}
               onChangeText={setWelcome}
               multiline
               maxLength={200}
             />
           ) : (
-            <View style={st.welcomeBox}>
-              <Text style={st.welcomeBoxTxt}>{welcome}</Text>
+            <View style={[st.welcomeBox, { backgroundColor: theme.surface, borderColor: theme.border }]}>
+              <Text style={[st.welcomeBoxTxt, { color: theme.text }]}>{welcome}</Text>
             </View>
           )}
         </View>
@@ -236,26 +240,26 @@ export default function BoutiqueScreen() {
         {/* Products in boutique */}
         <View style={st.section}>
           <View style={st.sectionTitleRow}>
-            <IconSymbol name="bag" size={18} color={COLORS.gray800} />
-            <Text style={st.sectionTitle}>Produits dans votre vitrine</Text>
+            <IconSymbol name="bag" size={18} color={theme.text} />
+            <Text style={[st.sectionTitle, { color: theme.text }]}>Produits dans votre vitrine</Text>
           </View>
           {products
             .filter((p) => p.stockQty > 0)
             .slice(0, 6)
             .map((p) => (
-              <View key={p.id} style={st.productRow}>
-                <View style={st.productThumb}>
-                  <IconSymbol name="package" size={22} color={COLORS.gray500} />
+              <View key={p.id} style={[st.productRow, { backgroundColor: theme.surface }]}>
+                <View style={[st.productThumb, { backgroundColor: theme.surface2 }]}>
+                  <IconSymbol name="package" size={22} color={theme.muted} />
                 </View>
                 <View style={{ flex: 1 }}>
-                  <Text style={st.productName}>{p.name}</Text>
-                  <Text style={st.productUnit}>Vendu par {p.unit}</Text>
+                  <Text style={[st.productName, { color: theme.text }]}>{p.name}</Text>
+                  <Text style={[st.productUnit, { color: theme.muted }]}>Vendu par {p.unit}</Text>
                 </View>
                 <Text style={st.productPrice}>{fmt(p.salePrice)}</Text>
               </View>
             ))}
           {products.filter((p) => p.stockQty === 0).length > 0 && (
-            <Text style={st.hiddenNote}>
+            <Text style={[st.hiddenNote, { color: theme.muted }]}>
               * {products.filter((p) => p.stockQty === 0).length} article(s)
               épuisé(s) masqué(s)
             </Text>
@@ -265,23 +269,23 @@ export default function BoutiqueScreen() {
         {/* Contact options */}
         <View style={st.section}>
           <View style={st.sectionTitleRow}>
-            <IconSymbol name="phone" size={18} color={COLORS.gray800} />
-            <Text style={st.sectionTitle}>Options de contact client</Text>
+            <IconSymbol name="phone" size={18} color={theme.text} />
+            <Text style={[st.sectionTitle, { color: theme.text }]}>Options de contact client</Text>
           </View>
-          <View style={st.contactCard}>
+          <View style={[st.contactCard, { backgroundColor: theme.surface }]}>
             <View style={st.contactRow}>
               <IconSymbol name="message" size={20} color={COLORS.green600} />
-              <Text style={st.contactTxt}>Message WhatsApp direct</Text>
+              <Text style={[st.contactTxt, { color: theme.text }]}>Message WhatsApp direct</Text>
               <Text
                 style={{ color: COLORS.green500, fontWeight: FONT_WEIGHT.bold }}
               >
                 Actif
               </Text>
             </View>
-            <View style={st.contactDivider} />
+            <View style={[st.contactDivider, { backgroundColor: theme.border }]} />
             <View style={st.contactRow}>
               <IconSymbol name="phone" size={20} color={COLORS.green600} />
-              <Text style={st.contactTxt}>Appel téléphonique</Text>
+              <Text style={[st.contactTxt, { color: theme.text }]}>Appel téléphonique</Text>
               <Text
                 style={{ color: COLORS.green500, fontWeight: FONT_WEIGHT.bold }}
               >
@@ -298,7 +302,7 @@ export default function BoutiqueScreen() {
 }
 
 const st = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.gray50 },
+  safe: { flex: 1 },
   header: {
     flexDirection: "row",
     alignItems: "center",

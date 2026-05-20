@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import type { FixedCharge } from "@/context/AppContext";
 import { useApp } from "@/context/AppContext";
 import * as chargesService from "@/services/charges.service";
@@ -51,6 +53,8 @@ function PieBar({ data }: { data: { value: number; color: string }[] }) {
 
 export default function ChargesScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { charges: localCharges, setCharges } = useApp();
   const [charges, setItems] = useState<FixedCharge[]>([]);
   const [monthlyTotal, setMonthlyTotal] = useState(0);
@@ -132,12 +136,12 @@ export default function ChargesScreen() {
       : charges.reduce((s, c) => s + c.amount, 0);
 
   return (
-    <SafeAreaView style={st.safe}>
-      <View style={st.header}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
+      <View style={[st.header, { backgroundColor: theme.surface }]}>
         <TouchableOpacity style={st.back} onPress={() => router.back()}>
           <Text style={st.backTxt}>←</Text>
         </TouchableOpacity>
-        <Text style={st.title}>Mes Charges Fixes</Text>
+        <Text style={[st.title, { color: theme.text }]}>Mes Charges Fixes</Text>
         <TouchableOpacity
           style={st.addBtn}
           onPress={() => router.push("/charges/new-charge" as any)}
@@ -179,7 +183,7 @@ export default function ChargesScreen() {
                 <View style={st.chargeIconBox}>
                   <IconSymbol name={c.icon} size={30} color={chartColors[i % chartColors.length]} />
                 </View>
-                <Text style={st.chargeName}>{c.label}</Text>
+                <Text style={[st.chargeName, { color: theme.text }]}>{c.label}</Text>
                 <Text
                   style={[
                     st.chargeAmt,
@@ -188,7 +192,7 @@ export default function ChargesScreen() {
                 >
                   {fmt(c.amount)}
                 </Text>
-                <Text style={st.chargePeriod}>{FREQ_LABELS[c.frequency]}</Text>
+                <Text style={[st.chargePeriod, { color: theme.muted }]}>{FREQ_LABELS[c.frequency]}</Text>
               </TouchableOpacity>
             ))}
             <TouchableOpacity
@@ -208,8 +212,8 @@ export default function ChargesScreen() {
             <View style={st.totalHeader}>
               <IconSymbol name="banknote" size={28} color={COLORS.green600} />
               <View>
-                <Text style={st.totalLabel}>TOTAL CHARGES (équiv. mensuel) :</Text>
-                <Text style={st.totalAmount}>{fmt(totalCharges)}</Text>
+                <Text style={[st.totalLabel, { color: theme.muted }]}>TOTAL CHARGES (équiv. mensuel) :</Text>
+                <Text style={[st.totalAmount, { color: theme.text }]}>{fmt(totalCharges)}</Text>
               </View>
             </View>
 
@@ -222,7 +226,7 @@ export default function ChargesScreen() {
                       { backgroundColor: chartColors[i % chartColors.length] },
                     ]}
                   />
-                  <Text style={st.legendTxt}>{c.label}</Text>
+                  <Text style={[st.legendTxt, { color: theme.text }]}>{c.label}</Text>
                   <Text style={st.legendPct}>
                     {totalCharges > 0
                       ? Math.round((c.amount / totalCharges) * 100)
@@ -245,11 +249,11 @@ export default function ChargesScreen() {
 
           <View style={st.section}>
             <View style={st.sectionTitleRow}>
-              <IconSymbol name="calendar" size={20} color={COLORS.gray800} />
-              <Text style={st.sectionTitle}>Prochaines échéances</Text>
+              <IconSymbol name="calendar" size={20} color={theme.text} />
+              <Text style={[st.sectionTitle, { color: theme.text }]}>Prochaines échéances</Text>
             </View>
             {charges.length === 0 && (
-              <Text style={st.emptyTxt}>Aucune charge enregistrée</Text>
+            <Text style={[st.emptyTxt, { color: theme.muted }]}>Aucune charge enregistrée</Text>
             )}
             {[...charges]
               .sort((a, b) => a.nextDueDate.localeCompare(b.nextDueDate))
@@ -266,8 +270,8 @@ export default function ChargesScreen() {
                   >
                     <IconSymbol name={c.icon} size={22} color={chartColors[i % chartColors.length]} />
                     <View style={{ flex: 1 }}>
-                      <Text style={st.dueName}>{c.label}</Text>
-                      <Text style={st.dueDate}>Échéance : {c.nextDueDate}</Text>
+                      <Text style={[st.dueName, { color: theme.text }]}>{c.label}</Text>
+                      <Text style={[st.dueDate, { color: theme.muted }]}>Échéance : {c.nextDueDate}</Text>
                     </View>
                     <View style={{ alignItems: "flex-end" }}>
                       <Text
@@ -298,7 +302,7 @@ export default function ChargesScreen() {
 }
 
 const st = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.gray50 },
+  safe: { flex: 1 },
   loadingBox: { flex: 1, alignItems: "center", justifyContent: "center" },
   offlineBanner: {
     marginHorizontal: SPACING.lg,

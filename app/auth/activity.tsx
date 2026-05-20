@@ -1,12 +1,14 @@
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { ActivityType, useApp } from "@/context/AppContext";
 import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
@@ -74,6 +76,8 @@ function AnimatedTouchable({
 
 export default function ActivityScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { setUser } = useApp();
   const [selected, setSelected] = useState<ActivityType>("commerce");
   const [isLoading, setIsLoading] = useState(false);
@@ -101,7 +105,7 @@ export default function ActivityScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <TouchableOpacity style={styles.back} onPress={() => router.back()}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <IconSymbol
@@ -118,11 +122,11 @@ export default function ActivityScreen() {
           <View style={styles.miniIcon}>
             <Text style={styles.miniIconText}>L</Text>
           </View>
-          <Text style={styles.brandName}>LISSAFI-P</Text>
+          <Text style={[styles.brandName, { color: theme.text }]}>LISSAFI-P</Text>
         </View>
 
-        <Text style={styles.heading}>Quel est votre m&eacute;tier ?</Text>
-        <Text style={styles.sub}>
+        <Text style={[styles.heading, { color: theme.text }]}>Quel est votre m&eacute;tier ?</Text>
+        <Text style={[styles.sub, { color: theme.muted }]}>
           Choisissez votre secteur d&apos;activit&eacute;
         </Text>
 
@@ -132,6 +136,7 @@ export default function ActivityScreen() {
               key={a.id}
               style={[
                 styles.item,
+                { borderColor: theme.border, backgroundColor: theme.surface2 },
                 selected === a.id ? styles.itemSelected : null,
               ]}
               onPress={() => setSelected(a.id)}
@@ -139,7 +144,7 @@ export default function ActivityScreen() {
               <IconSymbol
                 name={a.icon as any}
                 style={{ width: 24, height: 24 }}
-                color={selected === a.id ? COLORS.white : COLORS.gray600}
+                  color={selected === a.id ? COLORS.white : theme.text}
               />
               <Text
                 style={[
@@ -177,7 +182,7 @@ export default function ActivityScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.white },
+  safe: { flex: 1 },
   back: { padding: SPACING.lg },
   backText: {
     color: COLORS.green600,
@@ -208,17 +213,14 @@ const styles = StyleSheet.create({
   brandName: {
     fontWeight: FONT_WEIGHT.bold,
     fontSize: FONT_SIZE.lg,
-    color: COLORS.navy700,
   },
   heading: {
     fontWeight: FONT_WEIGHT.extrabold,
     fontSize: FONT_SIZE.xxl,
-    color: COLORS.navy800,
     marginBottom: SPACING.xs,
   },
   sub: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.gray500,
     marginBottom: SPACING.xl,
   },
   list: { gap: SPACING.sm, marginBottom: SPACING.xl },
@@ -229,8 +231,6 @@ const styles = StyleSheet.create({
     padding: SPACING.md + 2,
     borderRadius: RADIUS.lg,
     borderWidth: 1.5,
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray50,
   },
   itemSelected: {
     backgroundColor: COLORS.green50,

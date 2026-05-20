@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -25,6 +27,8 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 
 export default function OtpScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { phone = "" } = useLocalSearchParams<{ phone: string }>();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
@@ -123,7 +127,7 @@ export default function OtpScreen() {
     : "+237 6XX XXX XXX";
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={[styles.safe, { backgroundColor: theme.background }]}>
       <TouchableOpacity style={styles.back} onPress={handleBack}>
         <Text style={styles.backText}>← Retour</Text>
       </TouchableOpacity>
@@ -132,8 +136,8 @@ export default function OtpScreen() {
         <View style={styles.iconBox}>
           <IconSymbol name="phone" size={34} color={COLORS.green600} />
         </View>
-        <Text style={styles.heading}>Vérification OTP</Text>
-        <Text style={styles.sub}>
+        <Text style={[styles.heading, { color: theme.text }]}>Vérification OTP</Text>
+        <Text style={[styles.sub, { color: theme.muted }]}>
           Entrez le code à 6 chiffres{"\n"}envoyé par SMS au {maskedPhone}
         </Text>
 
@@ -144,7 +148,11 @@ export default function OtpScreen() {
               ref={(r) => {
                 if (r) inputs.current[i] = r;
               }}
-              style={[styles.otpInput, digit ? styles.otpFilled : null]}
+              style={[
+                styles.otpInput,
+                { borderColor: theme.border, backgroundColor: theme.surface2, color: theme.text },
+                digit ? styles.otpFilled : null,
+              ]}
               value={digit}
               onChangeText={(v) => handleChange(v.slice(-1), i)}
               onKeyPress={(e) => handleKeyPress(e, i)}
@@ -185,7 +193,7 @@ export default function OtpScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.white },
+  safe: { flex: 1 },
   back: { padding: SPACING.lg },
   backText: {
     color: COLORS.green600,
@@ -211,12 +219,10 @@ const styles = StyleSheet.create({
   heading: {
     fontWeight: FONT_WEIGHT.extrabold,
     fontSize: FONT_SIZE.xxl,
-    color: COLORS.navy800,
     marginBottom: SPACING.sm,
   },
   sub: {
     fontSize: FONT_SIZE.sm,
-    color: COLORS.gray500,
     textAlign: "center",
     lineHeight: 20,
     marginBottom: SPACING.xxxl,
@@ -227,11 +233,8 @@ const styles = StyleSheet.create({
     height: 56,
     borderRadius: RADIUS.md,
     borderWidth: 2,
-    borderColor: COLORS.gray200,
-    backgroundColor: COLORS.gray50,
     fontSize: FONT_SIZE.xl,
     fontWeight: FONT_WEIGHT.bold,
-    color: COLORS.gray900,
     textAlign: "center",
   },
   otpFilled: {
