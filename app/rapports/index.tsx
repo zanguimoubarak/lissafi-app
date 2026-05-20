@@ -1,12 +1,14 @@
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import type { FixedCharge } from "@/context/AppContext";
 import { useApp } from "@/context/AppContext";
 import * as chargesService from "@/services/charges.service";
@@ -96,6 +98,8 @@ function computeLocalTotals(
 
 export default function RapportsFullScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { operations, charges: localCharges, user } = useApp();
   const isPro = user?.plan === "pro";
 
@@ -209,7 +213,7 @@ export default function RapportsFullScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={st.safe}>
+      <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
         <View style={st.loadingBox}>
           <ActivityIndicator color={COLORS.green600} size="small" />
         </View>
@@ -218,16 +222,16 @@ export default function RapportsFullScreen() {
   }
 
   return (
-    <SafeAreaView style={st.safe}>
-      <View style={st.header}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
+      <View style={[st.header, { backgroundColor: theme.surface }]}>
         <TouchableOpacity style={st.back} onPress={() => router.back()}>
           <IconSymbol
             name="chevron.left"
             style={{ width: 20, height: 20 }}
-            color={COLORS.gray800}
+            color={theme.text}
           />
         </TouchableOpacity>
-        <Text style={st.title}>Rapports Financiers</Text>
+        <Text style={[st.title, { color: theme.text }]}>Rapports Financiers</Text>
         <View style={{ flexDirection: "row", gap: 8 }}>
           <TouchableOpacity
             style={st.exportBtn}
@@ -552,7 +556,7 @@ export default function RapportsFullScreen() {
 }
 
 const st = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.gray50 },
+  safe: { flex: 1 },
   loadingBox: { flex: 1, alignItems: "center", justifyContent: "center" },
   offlineBanner: {
     marginHorizontal: SPACING.lg,
