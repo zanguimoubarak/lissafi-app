@@ -399,8 +399,8 @@ export default function StockScreen() {
       </View>
 
       {(outCount > 0 || lowCount > 0) && (
-        <View style={st.alertsSection}>
-          <Text style={st.alertsTitle}>Alertes stock</Text>
+        <View style={[st.alertsSection, { backgroundColor: colors.surface, borderBottomColor: colors.border }]}>
+          <Text style={[st.alertsTitle, { color: colors.text }]}>Alertes stock</Text>
           {outCount > 0 && (
             <View style={st.alertRow}>
               <IconSymbol
@@ -408,7 +408,7 @@ export default function StockScreen() {
                 style={{ width: 12, height: 12 }}
                 color={COLORS.red500}
               />
-              <Text style={st.alertRowTxt}>
+              <Text style={[st.alertRowTxt, { color: colors.text }]}>
                 {outCount} article{outCount > 1 ? "s" : ""} en rupture
               </Text>
             </View>
@@ -420,7 +420,7 @@ export default function StockScreen() {
                 style={{ width: 12, height: 12 }}
                 color={COLORS.amber500}
               />
-              <Text style={st.alertRowTxt}>
+              <Text style={[st.alertRowTxt, { color: colors.text }]}>
                 {lowCount} article{lowCount > 1 ? "s" : ""} en stock faible
               </Text>
             </View>
@@ -432,10 +432,10 @@ export default function StockScreen() {
         <IconSymbol
           name="magnifyingglass"
           style={{ width: 16, height: 16, marginRight: 8 }}
-          color={COLORS.gray400}
+          color={colors.muted}
         />
         <TextInput
-          style={st.searchInput}
+          style={[st.searchInput, { color: colors.text }]}
           placeholder="Rechercher un article..."
           placeholderTextColor={COLORS.gray400}
           cursorColor={COLORS.primary}
@@ -448,7 +448,7 @@ export default function StockScreen() {
             <IconSymbol
               name="xmark"
               style={{ width: 16, height: 16 }}
-              color={COLORS.gray400}
+              color={colors.muted}
             />
           </TouchableOpacity>
         ) : null}
@@ -504,7 +504,7 @@ export default function StockScreen() {
               style={{ width: 40, height: 40 }}
               color={COLORS.gray300}
             />
-            <Text style={st.emptyTxt}>
+            <Text style={[st.emptyTxt, { color: colors.muted }]}>
               {debouncedSearch
                 ? "Aucun article trouvé"
                 : "Aucun article dans votre catalogue"}
