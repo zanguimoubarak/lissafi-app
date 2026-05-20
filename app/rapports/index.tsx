@@ -278,7 +278,7 @@ export default function RapportsFullScreen() {
           </Text>
         </View>
 
-        <View style={st.card}>
+        <View style={[st.card, { backgroundColor: theme.surface }]}>
           <View
             style={{
               flexDirection: "row",
@@ -312,7 +312,7 @@ export default function RapportsFullScreen() {
           ))}
         </View>
 
-        <View style={st.card}>
+        <View style={[st.card, { backgroundColor: theme.surface }]}>
           <View
             style={{
               flexDirection: "row",
@@ -381,7 +381,7 @@ export default function RapportsFullScreen() {
           </View>
         </View>
 
-        <View style={st.card}>
+        <View style={[st.card, { backgroundColor: theme.surface }]}>
           <View
             style={{
               flexDirection: "row",
@@ -439,7 +439,7 @@ export default function RapportsFullScreen() {
                       style={{
                         flex: 1,
                         height: 6,
-                        backgroundColor: COLORS.gray100,
+                        backgroundColor: theme.surface2,
                         borderRadius: 3,
                         overflow: "hidden",
                       }}
@@ -456,7 +456,7 @@ export default function RapportsFullScreen() {
                     <Text
                       style={{
                         fontSize: FONT_SIZE.xs,
-                        color: COLORS.gray400,
+                        color: theme.muted,
                         width: 32,
                         textAlign: "right",
                       }}
@@ -470,7 +470,7 @@ export default function RapportsFullScreen() {
           })}
         </View>
 
-        <View style={st.card}>
+        <View style={[st.card, { backgroundColor: theme.surface }]}>
           <View
             style={{
               flexDirection: "row",
@@ -521,7 +521,7 @@ export default function RapportsFullScreen() {
                         borderRadius: 4,
                       }}
                     />
-                    <Text style={{ fontSize: 9, color: COLORS.gray400 }}>
+                    <Text style={{ fontSize: 9, color: theme.muted }}>
                       {label}
                     </Text>
                   </View>
