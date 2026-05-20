@@ -1,11 +1,13 @@
 import {
   COLORS,
+  Colors,
   FONT_SIZE,
   FONT_WEIGHT,
   RADIUS,
   SHADOW,
   SPACING,
 } from "@/constants/theme";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useApp } from "@/context/AppContext";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -28,6 +30,8 @@ function fmt(n: number) {
 
 export default function BoutiqueScreen() {
   const router = useRouter();
+  const scheme = useColorScheme() ?? "light";
+  const theme = Colors[scheme];
   const { user, products } = useApp();
   const isPro = user?.plan === "free";
 
@@ -68,12 +72,12 @@ export default function BoutiqueScreen() {
 
   if (!isPro) {
     return (
-      <SafeAreaView style={st.safe}>
-        <View style={st.header}>
+      <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
+        <View style={[st.header, { backgroundColor: theme.surface }]}>
           <TouchableOpacity style={st.back} onPress={() => router.back()}>
-            <IconSymbol name="chevron.left" size={24} color={COLORS.gray700} />
+            <IconSymbol name="chevron.left" size={24} color={theme.text} />
           </TouchableOpacity>
-          <Text style={st.title}>Boutique en Ligne</Text>
+          <Text style={[st.title, { color: theme.text }]}>Boutique en Ligne</Text>
           <View style={{ width: 36 }} />
         </View>
         <View style={st.proGate}>
@@ -113,12 +117,12 @@ export default function BoutiqueScreen() {
   }
 
   return (
-    <SafeAreaView style={st.safe}>
-      <View style={st.header}>
+    <SafeAreaView style={[st.safe, { backgroundColor: theme.background }]}>
+      <View style={[st.header, { backgroundColor: theme.surface }]}>
         <TouchableOpacity style={st.back} onPress={() => router.back()}>
-          <IconSymbol name="chevron.left" size={24} color={COLORS.gray700} />
+          <IconSymbol name="chevron.left" size={24} color={theme.text} />
         </TouchableOpacity>
-        <Text style={st.title}>Ma Boutique en Ligne</Text>
+        <Text style={[st.title, { color: theme.text }]}>Ma Boutique en Ligne</Text>
         <View style={{ width: 36 }} />
       </View>
 
@@ -298,7 +302,7 @@ export default function BoutiqueScreen() {
 }
 
 const st = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: COLORS.gray50 },
+  safe: { flex: 1 },
   header: {
     flexDirection: "row",
     alignItems: "center",
